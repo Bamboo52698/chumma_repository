@@ -1,0 +1,86 @@
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {DataTableDirective} from 'angular-datatables';
+import { Subject } from 'rxjs';
+
+
+
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+
+export class AppComponent implements OnInit, OnDestroy{
+
+  UsersArray : any[] = [];
+  isResultLoaded = false;
+  isUpdateFormActive = false;
+  dtoptions : DataTables.Settings= {} ;
+  dtTrigger: Subject<any> = new Subject<any>;
+
+  @ViewChild(DataTableDirective, {static: false})
+datatableElement: any = DataTableDirective;
+
+  min: any = 0;
+max: any = 0;
+
+
+
+
+  
+  constructor(private http: HttpClient ) 
+  {
+    this.getAllStudent();
+  }
+  ngOnInit(): void {
+
+    this.dtoptions={
+      pagingType:"full_numbers",
+      lengthChange:true
+    }
+
+    $.fn.dataTable.ext.search.push((settings: any, data: string[], dataIndex: any) => {
+      const id = parseFloat(data[0]) || 0; // use data for the id column
+      return (Number.isNaN(this.min) && Number.isNaN(this.max)) ||
+          (Number.isNaN(this.min) && id <= this.max) ||
+          (this.min <= id && Number.isNaN(this.max)) ||
+          (this.min <= id && id <= this.max);
+    });
+    
+
+  }
+  getAllStudent()
+  { 
+    this.http.get("http://localhost:8888/api/user/")
+    .subscribe((resultData: any)=>
+    {
+        this.isResultLoaded = true;
+        console.log(resultData.data);
+        this.UsersArray = resultData.data;
+        this.dtTrigger.next(resultData);
+    });
+  }
+
+  
+
+  filterById(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.draw();
+    });
+  }
+
+
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+    $.fn.dataTable.ext.search.pop();
+  }
+
+  
+}
+
+
+
+
