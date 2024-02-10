@@ -1,28 +1,24 @@
-
-
-<style>
-
-  body{
-    background-color: #EAECEE;
-    /* font-family: 'Poppins', sans-serif; */
-
-  }
-  
-
-</style>
-
+<!-- Back ground layer for Header -->
 <div class="w-100 h-100 p-3">
-<div class="mt-3 m-auto border rounded shadow-lg align-center p-2 justify-content-end">
+  <!-- Header -->
+<div class="border rounded shadow-lg align-center p-1 ">
+  <!-- Header in the formatt of nav-bar -->
   <nav class="navbar navbar-expand-lg">
+    <!-- Container for  Un-Ordered List-->
     <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Un Ordered List -->
       <ul class="navbar-nav">
+        <!-- List one Page heading -->
         <li class="nav-item  ml-auto mr-1">
-          <span class="h5 fw-bolder">USER'S DETAILS</span>
+          <!-- to show the text -->
+          <span class="h5 fw-bolder">USER DETAILS</span>
         </li>
       </ul>
-      <ul class="navbar-nav ms-auto md-2 mb-lg-0">
+      <!-- Second Un-Ordered List -->
+      <ul class="navbar-nav ms-auto md-2 mb-lg-1">
+        <!-- list Items -->
         <li class="nav-item position-right">
-          <span class="h5 fw-bolder">Total Users: </span>
+          <span class="h5 fw-bolder">Total Users: 45 </span>
         </li>
       </ul>
     </div>
@@ -30,29 +26,65 @@
 </div>
 </div>
 
+<!-- Outer Container for Table -->
 <div class="w-100 h-100 p-3">
+  <!-- Inner container for table -->
 <div  class=" w-100 h-100 border rounded shadow-lg align-center p-3">
-  <!-- <button class="btn btn-info text-center p-2 w-20  h-100" (click)="open" type="submit" value="export">Export</button> -->
+  <!-- Table uses the datatables which is defaultly used in the angular -->
 <table datatable [dtOptions]="dtoptions" class="table mt-5 table-responsive table-center table-hover table-borderless text-center">
-  <thead class="border-bottom">     
+  <!-- Table Head -->
+  <thead class="border-bottom">   
+      <!-- Frist row -->
   <tr class="p-3">
-    <th class= "p-3 h5 fw-bolder bg-warning border border-right-4 border-right-primary text-center" scope="col">ID</th>
-      <th class= "p-3 h5 fw-bolder bg-warning border border-right-4 border-right-primary text-center" scope="col">Name</th>
-      <th class= "p-3 h5 fw-bolder bg-warning border border-right-4 border-right-primary text-center" scope="col">Email ID</th> 
-      <th class= "p-3 h5 fw-bolder bg-warning border border-right-4 border-right-primary text-center" scope="col">Mobile Number</th>
-      <th class= "p-3 h5 fw-bolder bg-warning border border-right-4 border-right-primary text-center" scope="col">Created At</th>
-      <th class= "p-3 h5 fw-bolder bg-warning border border-right-4 border-right-primary text-center" scope="col">Expired At</th>
+    <!-- Table Headings -->
+    <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">ID</th>
+      <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">Name</th>
+      <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">Email ID</th> 
+      <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">Mobile Number</th>
+      <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">AppInstalledDate</th>
+      <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">AppExipiredDate</th>
+      <th class= "p-3 h5 fw-bolder border border-right-4 border-right-primary text-center" scope="col">Edit the table</th>
     </tr>
   </thead>
+  <!-- Table Body -->
   <tbody>
+    <!-- this table row uses the for loop for fetch the data from object -->
       <tr class="border-bottom" *ngFor="let useritem of UsersArray">
-        <td  class= "p-3 fs-6 fw-bolder " scope="row">{{useritem.S_No}}</td>
-      <td class= "p-3 fs-6 fw-bolder " >{{useritem.Name  }}</td>
-      <td class= "p-3 fs-6 fw-bolder " >{{useritem.Email_ID }}</td>
-      <td class= "p-3 fs-6 fw-bolder " >{{useritem.Mobile_Number }}</td>
-      <td class= "p-3 fs-6 fw-bolder " >{{useritem.Created_At }}</td>
-    </tr> 
-  </tbody>
+        <!-- This table data for the Users ID, it fetches the data from the useritem obj using the colomn name of the DB -->
+      <td  class= "p-3 fs-6 fw-bolder " scope="row">{{useritem.ID}}</td>
+      <!-- This table data for the Users Name-->
+      <td class= "p-3 fs-6 fw-bolder ">{{useritem.UserName}}<br>
+      <input type="text" value="{{useritem.UserName }}" *ngIf="idToShow === useritem.ID && isEditClicked" [(ngModel)]="UserNameUpdate"/>
+      </td>
+      <!-- Here I uses the *ngif for unhide the input field when I click the Edit Button -->
+      <td class= "p-3 fs-6 fw-bolder" >{{useritem.UserEmail }}<br>
+        <input type="text" value="{{useritem.UserEmail }} " *ngIf="idToShow === useritem.ID && isEditClicked" [(ngModel)]="UserEmailUpdate"/>
+      </td>
+      <!-- Each Button in the row are responsed by the the row Id -->
+      <td class= "p-3 fs-6 fw-bolder " >{{useritem.UserMobileNo}}<br>
+        <input type="text" value="{{useritem.UserMobileNo }}" *ngIf="idToShow === useritem.ID && isEditClicked" [(ngModel)]="UserMobileNoUpdate"/></td>
+        <!-- isEditClicked used to visible and invisible the input field -->
+      <td class= "p-3 fs-6 fw-bolder " >{{useritem.AppInstalledDate }}<br>
+        <input type="text" value="{{useritem.AppInstalledDate }}" *ngIf="idToShow === useritem.ID && isEditClicked"/></td>
+    
+      <td class= "p-3 fs-6 fw-bolder " >{{useritem.AppExipiredDate }}<br>
+        <input type="text" value="{{useritem.AppExipiredDate }}"*ngIf="idToShow === useritem.ID && isEditClicked"/></td>
+
+        <!-- this row has a three buttons submit and delete are works vice versa. showtableData() used for visible and in visible the input field -->
+      <td class="p-3 ">
+        <button type="button" class="btn btn-success" (click)="showTableData(useritem.ID)">Edit</button>
+        <!-- Submit is used to Update the records in the DB-->
+        <button type="button" class="btn btn-primary ms-2 mt-3" *ngIf="idToShow === useritem.ID && isEditClicked" (click)="UpdateRecords(useritem)">Submit</button>
+      <!-- To dalete the rows -->
+        <button type="button" class="btn btn-danger ms-2" *ngIf="!isEditClicked"  (click)="setDelete(useritem)">Delete</button>
+    </td> 
+
+
+    </tr>
+
+
+
+
 </table>
 </div>
 </div>
